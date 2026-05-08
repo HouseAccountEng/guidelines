@@ -36,6 +36,35 @@ Do not add documentation for private classes or private methods.
 
 Never call private methods using `.send` or `.public_send` on an object
 
+## Make every database migration reversible
+
+When some actions only happen in the `up` sense, use `up_only`, not `up` and `down`.
+When some actions only happen in the `up` and `down` sense, use `reversible`, not `up` and `down`.
+
+```ruby
+# Bad
+def up
+  add_column :bookings, :satisfied, :boolean
+  Booking.where(status: :liked).update_all satisfied: true, status: :fulfilled
+  Booking.where(status: :disliked).update_all satisfied: false, status: :fulfilled
+end
+
+def down
+  remove_column :bookings, :satisfied, :boolean
+end
+
+# Good
+def change
+  add_column :bookings, :satisfied, :boolean
+  reversible do |dir|
+    dir.up do
+      Booking.where(status: :liked).update_all satisfied: true, status: :fulfilled
+      Booking.where(status: :disliked).update_all satisfied: false, status: :fulfilled
+    end
+  end
+end
+```
+
 ## Follow REST
 
 We model web endpoints as CRUD operations on resources (REST).
@@ -54,6 +83,13 @@ resources :cards do
 end
 ```
 
+## Use Active Record -- do not use Arel or SQL
+
+When writing database operations, always resort to Active Record commands such as `find`,
+`insert_all`, `update_all`. Never reach out to Arel commands such as `Arel.sql('count')`
+and never reach out for SQL statements.
+
+
 ## Use `performs` to reduce cognitive overload for background jobs
 
 ## Create second-level controllers for nested routes
@@ -61,6 +97,7 @@ end
 ## Consider every endpoint to be turbo-enabled
 
 * This means to add `allow_other_host: true` or status: see_other, or data: { turbo_frame: '_top' }
+
 
 ## Limit inline method declarations to these cases:
 
@@ -78,13 +115,65 @@ end
 - If your code change removes the only usage of a method, remove that method
 - Don't add rescue statements for errors that have never happened
 
+## Do not write unit tests
+
+- Never create or update files in test/models
+- Never write unit tests for models
+
 ## Use short, meaningful names
 
 Example: Provider, not ServiceProvider. Chat, not Conversation
 
+## Use adjective to name concerns
+
+Example:
+
+```ruby
+# Bad
+module Booking::AppAssociation extend ActiveSupport::Concern
+…
+end
+
+# Good
+module Booking::Applied extend ActiveSupport::Concern
+…
+end
+
+```
+
+
 ## Use acronyms when they are correct
 
 Example: API, ZIP
+
+## Do not use single-letter variables
+
+The variable names should be meaningful. Example:
+
+```ruby
+# Bad
+@vertical.specialties.each do |s|
+  @provider.skills.find_or_create_by! specialty: s
+end
+
+# Good
+@vertical.specialties.each do |specialty|
+  @provider.skills.find_or_create_by! specialty: specialty
+end
+```
+
+## Only use parentheses when needed
+
+Example:
+
+```ruby
+# Bad
+Skill.find_or_create_by!(specialty: specialty)
+
+# Good
+Skill.find_or_create_by! specialty: specialty
+```
+
 
 ## For JavaScript, use Stimulus controllers as much as possible
 
