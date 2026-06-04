@@ -146,10 +146,16 @@ The controller for the `posts` resource should be `Users::PostsController`, not 
 - If your code change removes the only usage of a method, remove that method
 - Don't add rescue statements for errors that have never happened
 
-## Do not write unit tests
+## Tests
 
-- Never create or update files in test/models
-- Never write unit tests for models
+It's more important to ensure that the feature behaves as expected, rather than
+ensuring that a specific method behaves as expected. This encourages us to write
+tests that are more resilient to refactoring and less coupled to implementation
+details.
+
+- Never write unit tests.
+- Never write unit tests for models.
+- Prefer integration tests and system tests.
 
 ## Use short, meaningful names
 
