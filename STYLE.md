@@ -18,9 +18,41 @@ When a model exceeds the limit, ask yourself: can I group some methods together 
 When a controller exceeds the limit, ask yourself: would two separate controllers be clearer?
 When a helper exceeds the limit, ask yourself: would splitting into multiple helpers be clearer?
 
-# Don't wrap instance variables with accessors unless necessary
+## Don't wrap instance variables with accessors unless necessary
 
-See https://www.codewithjason.com/dont-wrap-instance-variables-attr_reader-unless-necessary/
+Examples:
+
+```ruby
+# Bad. Unclear if attribute is used outside of this class.
+
+class User
+  attr_reader :name
+
+  def initialize(name)
+    @name = name
+  end
+
+  def loud_name
+    "#{name.upcase}!!!"
+  end
+end
+```
+
+```ruby
+# Good. It's clear the attribute is only used within this class.
+
+class User
+  def initialize(name)
+    @name = name
+  end
+
+  def loud_name
+    "#{@name.upcase}!!!"
+  end
+end
+```
+
+See more here: https://www.codewithjason.com/dont-wrap-instance-variables-attr_reader-unless-necessary/
 
 ## Documentation is required
 
