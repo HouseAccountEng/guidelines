@@ -1,9 +1,9 @@
 # Style
 
-We aim to write code that is a pleasure to read, and we have opinions about how to do it well. 
+We aim to write code that is a pleasure to read, and we have opinions about how to do it well.
 We care about how code reads, how code looks, and how code makes you feel when you read it.
 
-We love discussing code. 
+We love discussing code.
 If you have questions about how to write something, or detect some code smell, ask away.
 A Pull Request is a great way to do this.
 
@@ -11,12 +11,8 @@ When writing new code, try to find similar code elsewhere to look for inspiratio
 
 ## Prefer many files over long files
 
-When we open an existing file, we don't want to feel overwhelmed. 
-Limiting the length of files to 50 lines increases readability and decrease headaches.
-
-We picked 50 as an arbitrary number of lines that can fit on any screen at a good font size.
-For the same reason, we set an arbitrary limit of 100 characters per line.
-These limits includes blank lines and comments and are enforced by Rubocop rules.
+- Max 200 lines per file
+- Max 100 characters per line
 
 When a model exceeds the limit, ask yourself: can I group some methods together into a concern?
 When a controller exceeds the limit, ask yourself: would two separate controllers be clearer?
