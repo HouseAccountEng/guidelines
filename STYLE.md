@@ -115,6 +115,16 @@ and never reach out for SQL statements.
 
 ## Create second-level controllers for nested routes
 
+For example with nested routes:
+
+```ruby
+resources :users do
+  resources :posts, only: %i[index create], module: :users
+end
+```
+
+The controller for the `posts` resource should be `Users::PostsController`, not `PostsController`.
+
 ## Consider every endpoint to be turbo-enabled
 
 * This means to add `allow_other_host: true` or status: see_other, or data: { turbo_frame: '_top' }
