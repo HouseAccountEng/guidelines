@@ -54,12 +54,6 @@ end
 
 See more here: https://www.codewithjason.com/dont-wrap-instance-variables-attr_reader-unless-necessary/
 
-## Documentation is required
-
-Every public class and public method must have YARD documentation.
-This is enforced by the `bin/yardoc --list-undoc` command, which is required to pass before merging a PR.
-Do not add documentation for private classes or private methods.
-
 ## Do not use meta-programming
 
 Never call private methods using `.send` or `.public_send` on an object
