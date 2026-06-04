@@ -113,9 +113,6 @@ When writing database operations, always resort to Active Record commands such a
 `insert_all`, `update_all`. Never reach out to Arel commands such as `Arel.sql('count')`
 and never reach out for SQL statements.
 
-
-## Use `performs` to reduce cognitive overload for background jobs
-
 ## Create second-level controllers for nested routes
 
 ## Consider every endpoint to be turbo-enabled
