@@ -56,7 +56,9 @@ See more here: https://www.codewithjason.com/dont-wrap-instance-variables-attr_r
 
 ## Do not use meta-programming
 
-Never call private methods using `.send` or `.public_send` on an object
+- Never call private methods using `.send` or `.public_send` on an object.
+- Avoid other meta-programming techniques.
+- Meta-programming makes code difficult to search and understand.
 
 ## Make every database migration reversible
 
