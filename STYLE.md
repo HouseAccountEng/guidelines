@@ -1,8 +1,5 @@
 # Style
 
-We aim to write code that is a pleasure to read, and we have opinions about how to do it well.
-We care about how code reads, how code looks, and how code makes you feel when you read it.
-
 We love discussing code.
 If you have questions about how to write something, or detect some code smell, ask away.
 A Pull Request is a great way to do this.
