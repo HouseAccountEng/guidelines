@@ -181,6 +181,23 @@ True in any Ruby, a gem included.
   `Object.const_set class_name, Class.new(Base)`.
 - `Style/MethodCallWithArgsParentheses`, `EnforcedStyle: omit_parentheses`. The cop is off
   by default, so it needs `Enabled: true` too.
+- The exception is a call in the condition — what comes *after* the `if`, whether it opens a
+  block or trails as a modifier. Two things are happening on the line, so the condition's
+  call keeps its parentheses and the reader can see where the argument ends and the branch
+  begins:
+
+      if @vertical.update(vertical_params)
+      params[:status] = :matched if params.delete(:engaged)
+
+- A call *before* a modifier `if` is not part of the condition, so it still omits them:
+
+      update_column :status, :matched if params.delete(:engaged)
+
+- Same for the rest of the family — `unless`, `while`, `until`, and a ternary's condition.
+- The cop cannot express this — `omit_parentheses` has no option for it, and inline disables
+  cost more than they buy: the comment alone is 53 characters, so the longer lines need a
+  three-line `disable`/`enable` block around one line of code. Decline the cop instead, with
+  the exception as the reason beside it, and hold the rule in review.
 
 ## Outdent visibility modifiers
 
