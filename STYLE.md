@@ -91,6 +91,20 @@ True whatever the language.
 
 True in any Ruby, a gem included.
 
+## Prefer a lazy enumerator
+
+- Where a collection can be walked lazily, walk it lazily, and where one can be written in
+  a lazy form, write it that way. An `Enumerator` hands over one item at a time, so a page
+  is fetched when the page before it runs out and a caller that wants three costs one
+  request rather than all of them.
+- Produce lazily too: `Enumerator.new { |yielder| ... }` rather than filling an array and
+  handing it back. The caller then decides how much of it is worth fetching.
+- `.to_a` gives the whole advantage away, and usually walks the collection twice — once to
+  build the array and once to use it. One pass, keeping only what the second pass needed.
+- The catch worth knowing: lazy work happens where the enumerator is finally walked, not
+  where it was written. A lock, a transaction, or credentials to write back afterwards are
+  all gone by then, so the walk belongs inside whatever holds them.
+
 ## Publish as little as possible
 
 - A public method is a promise kept for every caller there will ever be. One that only the
