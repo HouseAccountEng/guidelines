@@ -321,6 +321,14 @@ True in a Rails app.
   is not.
 - Assert the count in a test, so a later edit cannot quietly add one back.
 
+## Run system tests headless
+
+- A system test runs headless, always — `CI=1 bin/rails test` in an app that reads the
+  variable. A window opening on every run steals focus, and a suite nobody can leave
+  running is a suite nobody runs.
+- Headless is the default the code carries, not a flag to remember. Where a browser is
+  genuinely needed to watch a failure, ask for it explicitly, once.
+
 ## Order every paginated relation
 
 - Paging a relation with no order is not paging. Postgres may return rows any way it
