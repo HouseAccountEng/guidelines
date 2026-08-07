@@ -79,6 +79,16 @@ True whatever the language.
 
 True in any Ruby, a gem included.
 
+## Objects, not services
+
+- Behavior belongs to the object that owns the data, not to a class named after a verb.
+  `Service.new(params).call(options)` is two lines of ceremony around a method that wanted
+  to live on a model.
+- Never instantiate a class to call its `call`. A `call` method should not exist: name the
+  method after what it does — `provider.import_visits`, not `VisitImporter.new(provider).call`.
+- Too much for one class is a concern, or a second object with a name and a life of its own,
+  never a procedure wearing a class as a coat.
+
 ## No metaprogramming
 
 - Never call a method by name at runtime, and never define, fetch or set one that way.
