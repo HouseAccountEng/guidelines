@@ -24,6 +24,18 @@ True whatever the language.
   method.
 - No rescue for an error that has never happened.
 
+## Tell, don't ask through
+
+- Call methods on yourself, on what you were handed, and on what you hold — never on what
+  those hand back. `provider.import_visits(provider.authentication.upcoming)` reaches
+  through the provider to something standing behind it, then hands the provider its own
+  work: `provider.import_visits` says the same thing and leaves the provider free to
+  change how it gets there. The rule is old and has a name — the Law of Demeter.
+- Two calls on the same object in one expression are the tell. The second is nearly always
+  the work that object should have been asked to do.
+- A caller that knows the shape behind an object breaks when that shape moves, and the
+  shape behind an object is what moves most.
+
 ## Say it short
 
 - Between two versions carrying the same meaning the shorter wins — names, comments,
@@ -78,6 +90,14 @@ True whatever the language.
 # Ruby
 
 True in any Ruby, a gem included.
+
+## Publish as little as possible
+
+- A public method is a promise kept for every caller there will ever be. One that only the
+  class itself calls is private; one that exists so a caller can assemble an answer out of
+  parts should not exist at all.
+- Two public methods a caller has to use together are one method the class is missing. Add
+  that one and take the two away.
 
 ## Objects, not services
 
