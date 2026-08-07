@@ -91,6 +91,16 @@ True whatever the language.
 
 True in any Ruby, a gem included.
 
+## Hand back the enumerable, not the loop
+
+- A method that takes a block only to run `collection.each(&)` has chosen the caller's loop
+  for it. Hand the enumerable back instead and let whoever asked pick `each`, `map`,
+  `find`, or `take(2)` — the last of which the block form cannot express at all.
+- So `def upcoming_visits = fetch_them`, and the caller writes
+  `upcoming_visits.each { ... }`. Not `def each_upcoming_visit(&)`.
+- `each_` in a method name is the tell. The exception is a producer that genuinely has no
+  collection to hand over and yields as it goes.
+
 ## Prefer a lazy enumerator
 
 - Where a collection can be walked lazily, walk it lazily, and where one can be written in
