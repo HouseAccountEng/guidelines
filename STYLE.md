@@ -91,6 +91,21 @@ True whatever the language.
 
 True in any Ruby, a gem included.
 
+## Collect with map, not into an empty array
+
+- A loop gathering one thing per item is `map`. Naming an empty array, walking with `each`
+  and pushing into it takes three lines to say what one says, and names the array before
+  anyone knows what goes in it.
+- Folding into something that is not one per item — a hash, a grouping, a count — is
+  `each_with_object`: it hands the accumulator to the block and ignores what the block
+  answers, so a guard clause or a `push` cannot quietly break it.
+- `inject` is for a fold whose answer is one value: a sum, a minimum, a merge. Reaching for
+  it to gather a list means threading the accumulator through every branch and leaning on
+  `<<` answering the array it was handed — true until someone adds a condition.
+- `map` doing a little work along the way is fine where the collection is a result somebody
+  asked for. Where the work is the point and the list is incidental, say that with
+  `each_with_object` or a plain `each`.
+
 ## Hand back the enumerable, not the loop
 
 - A method that takes a block only to run `collection.each(&)` has chosen the caller's loop
