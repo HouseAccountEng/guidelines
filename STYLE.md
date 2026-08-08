@@ -141,6 +141,18 @@ True in any Ruby, a gem included.
   where it was written. A lock, a transaction, or credentials to write back afterwards are
   all gone by then, so the walk belongs inside whatever holds them.
 
+## Take the smallest thing you use
+
+- A method handed an object it only ever reaches one part of should have been handed that
+  part. `contact_of(visit)` opening with `client = visit.client` wanted `contact_of(client)`,
+  and the caller wanted `contact_of visit.client`.
+- A signature is a claim about what the method depends on. Taking the whole object claims it
+  depends on the whole object, so a reader has to read the body to learn otherwise, and every
+  change anywhere in that object looks like it might land here.
+- The tell is a first line that unwraps the argument. Reaching for two or three parts is
+  different — that method does want the object, and taking the parts separately would only
+  scatter the same knowledge across its callers.
+
 ## Name what you pass on
 
 - A method taking `**attributes` only to hand the bag to the next one tells its reader
