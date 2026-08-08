@@ -470,6 +470,17 @@ True in a Rails app.
   is not.
 - Assert the count in a test, so a later edit cannot quietly add one back.
 
+## One system test, many assertions
+
+- A system test pays for a browser before it asserts anything. Two files walking the same
+  page to check two features pay it twice; one test that walks it once and asserts both pays
+  it once, and reads as the sitting a user actually has.
+- Group by the page somebody is on rather than by the feature somebody is building: open it,
+  do the thing, assert what changed, do the next thing.
+- What the sharing exposes is worth the merge on its own. A fixture that only worked against
+  an empty database, or a wait that only passed because nothing had happened yet, fails the
+  moment a step runs before it — and it was lying in the split test all along.
+
 ## Run system tests headless where CI says so
 
 - A system test runs headless where `CI` is set in the environment, and opens a browser
