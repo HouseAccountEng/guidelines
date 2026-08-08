@@ -183,6 +183,46 @@ True in any Ruby, a gem included.
 - Too much for one class is a concern, or a second object with a name and a life of its own,
   never a procedure wearing a class as a coat.
 
+## Extract to an owner, not out of the way
+
+- A file over the length limit is a question about ownership, not a request to move lines
+  somewhere else. Cutting the behavior into a class named after a verb — `Sync`, `Importer`,
+  `Handler` — gets under the cap and leaves a procedure wearing a class as a coat.
+- Ask which object holds the data the behavior decides on, and move it there. The test is
+  whether the new home has a name someone who does not write code would recognize: a visit,
+  a location, a contact — not a visit sync.
+
+## Name a class for the system it speaks to
+
+- A class that has to know a third party's shapes says so in its name: `Contact::Jobber`,
+  not `Contact::Imported`. The name is what licenses the knowledge, and what tells the next
+  reader which file changes when that third party does.
+- Named honestly, it can take the foreign object whole. A translation layer built to keep
+  those shapes out of a class that was quietly full of them anyway can then go.
+
+## Give siblings the same shape
+
+- Classes doing the same kind of work — find-or-create across three models, one endpoint per
+  resource — read alike, down to the order of the branches and the name of the private method
+  that assembles the attributes.
+- The point is not tidiness. Once they match, the one that differs is saying something true
+  about the domain, and it can be seen without reading the others beside it.
+
+## Let the structure hold the rule
+
+- Prefer an arrangement where a rule cannot be broken over one where every method remembers
+  it. A model that refuses its own bad input answers nil, and whatever sits above it finds
+  nothing to attach: nobody checks, so nobody can forget to.
+- A rule kept by calling things in the right order, or by a comment saying what has to happen
+  first, is a rule waiting for the next edit.
+
+## A name that asks must not answer with a change
+
+- `claimed_by`, `matching`, `find_for` — a name that reads like a query has to stay one. A
+  lookup that also writes hides the write behind a word nobody expects it in.
+- Where both happen, say both: the branch that finds the record, and beneath it the line that
+  updates it, in the open.
+
 ## No metaprogramming
 
 - Never call a method by name at runtime, and never define, fetch or set one that way.
@@ -207,6 +247,8 @@ True in any Ruby, a gem included.
 - Never comment a private one — it earns its explanation from its name and its caller.
 - Inside a body, comment *why*, never *what*.
 - One line if at all possible. If one cannot carry it, cut the aside, not the rule.
+- A comment that keeps growing is paying interest on a design that does not explain itself.
+  Shorten the design first; the comment goes with it.
 
 ## Don't wrap an instance variable in an accessor
 
