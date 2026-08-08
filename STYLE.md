@@ -380,13 +380,16 @@ True in a Rails app.
   is not.
 - Assert the count in a test, so a later edit cannot quietly add one back.
 
-## Run system tests headless
+## Run system tests headless where CI says so
 
-- A system test runs headless, always — `CI=1 bin/rails test` in an app that reads the
-  variable. A window opening on every run steals focus, and a suite nobody can leave
-  running is a suite nobody runs.
-- Headless is the default the code carries, not a flag to remember. Where a browser is
-  genuinely needed to watch a failure, ask for it explicitly, once.
+- A system test runs headless where `CI` is set in the environment, and opens a browser
+  where it is not: `headless: !!ENV['CI']`. That one variable decides it — never a second
+  one of its own, and never a default the code carries whatever the machine says.
+- A machine that should never see a window says so once, by exporting `CI=1`. A window
+  opening mid-run steals focus, and a suite nobody can leave running is a suite nobody runs.
+- The prefix binds to one command: `CI=1 bin/rails db:reset && bin/rake` sets it for the
+  reset alone and leaves the tests headed. Export it, or put it in front of the command
+  that actually runs them.
 
 ## Order every paginated relation
 
