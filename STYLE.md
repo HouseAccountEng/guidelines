@@ -141,6 +141,18 @@ True in any Ruby, a gem included.
   where it was written. A lock, a transaction, or credentials to write back afterwards are
   all gone by then, so the walk belongs inside whatever holds them.
 
+## Name what you pass on
+
+- A method taking `**attributes` only to hand the bag to the next one tells its reader
+  nothing. Standing in that class there is no way to learn what is inside, which keys are
+  admissible, or which of them anything uses — the answer lives in a caller somewhere else.
+  Name every keyword the method actually takes.
+- Splatting a hash you hold into a call that names its keywords is fine: the names are right
+  there in the method being called. It is *accepting* a bag and forwarding it that hides
+  them, and a bag forwarded twice hides them twice over.
+- Where naming them all reads badly, the method is telling you it takes too many. Split it,
+  or hand over an object that knows what it holds.
+
 ## Publish as little as possible
 
 - A public method is a promise kept for every caller there will ever be. One that only the
