@@ -24,6 +24,17 @@ True whatever the language.
   method.
 - No rescue for an error that has never happened.
 
+## Ask a question once
+
+- A condition answered in one method and answered again, reversed, in the next is one
+  condition standing in the wrong place. Lift it above both, and let what sits underneath
+  assume the answer.
+- The tell is a pair reading opposite ways: `return if phone.blank?` in one, `... if
+  phone.present?` in the other. The second already knows the answer — it just does not know
+  that it knows, so it asks again and reads as though the case were still open.
+- Same where a caller checks before calling and the callee checks again. One of them owns
+  the question, usually the one that can do something about the answer.
+
 ## Tell, don't ask through
 
 - Call methods on yourself, on what you were handed, and on what you hold — never on what
