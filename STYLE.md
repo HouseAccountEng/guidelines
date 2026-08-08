@@ -231,8 +231,21 @@ True in any Ruby, a gem included.
 - `snake_case` for methods and variables, `CamelCase` for classes, `SCREAMING_SNAKE_CASE`
   for constants. Predicates end in `?`, dangerous variants in `!`.
 - `do...end` for multi-line blocks, `{...}` for single-line.
-- Guard clauses over nested conditionals. Return early. `unless` for simple negatives,
-  never `unless ... else`.
+- One `return` at most, and only as the first thing a method does: the case it refuses
+  before any work starts. Past that line the method runs to its end. `unless` for simple
+  negatives, never `unless ... else`.
+- A second `return` in the middle is branching by another name, and `if`/`elsif` says it
+  where a reader can see all the branches at once:
+
+```
+def import_visit(visit)                          # not: return ... if ours
+  if ours = provider.visits.find_by(jid: visit.id)
+    ours.update schedule_of(visit)
+  elsif location = location_of(visit)
+    provider.visits.create! attributes_of(visit).merge(location: location)
+  end
+end
+```
 - Prefer `&.`, `||=`, `Array()`, `Hash#fetch` with a default, and keyword arguments past
   two parameters.
 - Inline a method body on one line in exactly two cases: an empty body, `def show; end`,
