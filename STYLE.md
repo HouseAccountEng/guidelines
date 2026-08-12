@@ -247,6 +247,8 @@ True in any Ruby, a gem included.
 - Never comment a private one — it earns its explanation from its name and its caller.
 - Inside a body, comment *why*, never *what*.
 - One line if at all possible. If one cannot carry it, cut the aside, not the rule.
+- One line, not two. Where a YARD tag already says it, a prose line above says it twice —
+  keep the tag and drop the prose.
 - A comment that keeps growing is paying interest on a design that does not explain itself.
   Shorten the design first; the comment goes with it.
 
