@@ -252,6 +252,18 @@ True in any Ruby, a gem included.
 - A comment that keeps growing is paying interest on a design that does not explain itself.
   Shorten the design first; the comment goes with it.
 
+## The long version goes in the commit message
+
+- When one line will not hold everything worth saying, that is not a licence for a second
+  line — it is a sign the rest belongs in the commit message. Keep the line, move the essay.
+- The two are read at different times. Somebody reading the method wants to know what it is
+  for, right now, in one line. Somebody asking why it is like that is already in `git log`,
+  where the answer keeps its context: what it replaced, what was tried, what was ruled out.
+- A comment ages against the code it sits above; a message stays true, because it describes
+  the change it shipped with. Reasoning left in a comment is reasoning that will one day
+  describe code that no longer exists.
+- So: one line above the method, and the paragraphs in the message that introduces it.
+
 ## Don't wrap an instance variable in an accessor
 
 - An `attr_reader` for a variable only the class itself reads adds a method to the public
