@@ -476,6 +476,18 @@ True in a Rails app.
   `:markets` as a scope and fails much later with `undefined method 'arity'`.
 - Neither side helps against `delete_all`, which is raw SQL and skips callbacks.
 
+## Count through the association, not the counter cache
+
+- `service.bands.size`, not `service.bands_count`. A counter cache is an optimisation of the
+  SQL, and a view has no business knowing which optimisations the schema happens to carry.
+- The association reads as what it means — the bands of a service — and it is the same line
+  whether a counter cache exists, is added later, or is taken away. `bands_count` names a
+  column, and a view written against a column has to be revisited when the column moves.
+- `size` is the method that makes this work: it takes the cached column where there is one,
+  counts where there is not, and reads the records where they are already loaded.
+- Where the association cannot answer — no association at all, or a `has_many :through`,
+  where `size` would issue a query per row — the column stays. Say so where it is used.
+
 ## Encryption that a query can still find
 
 - A column that is queried or must stay unique needs `deterministic: true`.
