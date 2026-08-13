@@ -394,6 +394,16 @@ end
 - `*.gem` is gitignored: `gem build` leaves one for `git add -A` to sweep up. Nothing is
   lost — `spec.files` reads `git ls-files`.
 
+## A release is not done until the page says so
+
+- A gem with a GitHub Page has two places that state its API, and a release that updates
+  only one leaves the other lying. Push to RubyGems and update `gh-pages` in the same
+  breath — the version it names, the methods it lists, the examples it shows.
+- The page is what somebody reads before they install anything, so a stale one costs more
+  than no page at all: it teaches an API that the gem no longer has.
+- Checklist for a release, none of it optional: `CHANGELOG.md`, `README.md`, the version
+  constant, the tag, RubyGems, `gh-pages`.
+
 ---
 
 # Rails
