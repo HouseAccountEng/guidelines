@@ -405,6 +405,9 @@ end
   remembering.
 - `*.gem` is gitignored: `gem build` leaves one for `git add -A` to sweep up. Nothing is
   lost — `spec.files` reads `git ls-files`.
+- Delete the built `.gem` once `gem push` has taken it. It was scaffolding for one command,
+  and RubyGems now holds the copy that counts. Left behind, it is a stale build of a version
+  that may since have been amended, sitting in the working tree waiting to be pushed again.
 
 ## A release is not done until the page says so
 
