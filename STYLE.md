@@ -109,6 +109,28 @@ True whatever the language.
 
 ---
 
+## No code of conduct, no ideology
+
+- Never add a `CODE_OF_CONDUCT.md`, and never link to or mention one from a README, a
+  gemspec or anywhere else. Generators that write one (`bundle gem`) have that output
+  deleted.
+- Keep a codebase free of ethics, religion and politics — comments, docs, error messages,
+  fixtures and sample data alike.
+- A LICENSE is not covered by this. It is a legal notice.
+
+## No indefinite article in an interpolated string
+
+- Never write `a %{model}` or `an %{model}`. Which one is right is decided by sound and not
+  by spelling — an hour, an honest agent, a user, a European market, a one-off — and
+  registered acronyms split it again: a ZIP, an SMS, an API.
+- Nothing computes it. `ActiveSupport::Inflector` has no article method, and the gems that
+  add one guess from spelling with an exception list and guess wrong in public.
+- It would not survive translation anyway: an article is per-language and usually
+  per-gender, so an English one computed in Ruby is unusable to whoever translates the key.
+- Write the copy so the question never comes up. `Select…` rather than `Select a State…`,
+  since the label above the field already names it; `without its job` rather than
+  `without a job`.
+
 # Ruby
 
 True in any Ruby, a gem included.
@@ -432,6 +454,61 @@ end
 
 ---
 
+## List concerns alphabetically, on one line
+
+- Concerns are included in alphabetical order — `include Emailable, Phonable` — and one
+  `include` carries the whole list. Give each its own statement only when the single line
+  would not fit, and keep the order when you do.
+- Enforced by `Style/MixinGrouping` with `EnforcedStyle: grouped`. Its default is
+  `separated`, which demands the opposite, so the setting is not optional.
+- `include A, B` inserts them in reverse, so `A` ends up ahead of `B` in `ancestors`. That
+  only matters when both define the same method, which two concerns extracted for being
+  distinct features should not.
+
+## Git ignores a built gem
+
+- `*.gem` is gitignored. `rake build` puts one under `/pkg/`, which is ignored already, but
+  `gem build` leaves it in the working directory where `git add -A` sweeps up a megabyte of
+  binary release artifact.
+- Nothing is lost by hiding it: `spec.files` reads `git ls-files`, so a build is never
+  packaged inside the next one either way.
+
+## A gem's README says how to install it
+
+- Every gem we publish follows Semantic Versioning, and its README carries a `How to
+  install` section: the system install (`gem install <name>`), then the Gemfile line pinned
+  to the current major (`gem '<name>', '~> 2.0'`), then the sentence saying why that pin is
+  safe — `~> major.minor` means `bundle update` never crosses a breaking change.
+- Keep the snippet current: a major release updates the pin in the same commit that makes
+  it.
+- This does not soften "never use `~>`". That rule binds *our* Gemfiles and gemspecs naming
+  what we depend on; the README line is advice to hosts pinning *us*, which is exactly what
+  SemVer is for.
+
+## A gem's page draws its mark once and renders every icon a service asks for
+
+- A gem that gets a GitHub Page with colours and artwork of its own gets the whole icon set
+  in the same breath — the browser's, iOS', and the avatar GitHub and the social networks
+  show. A page whose tab is a blank sheet and whose repository is a grey identicon is half
+  built.
+- One drawing answers all of them: an `icon.svg` beside `index.html` holding the mark at the
+  scale a tab can carry, and a `build-icons.sh` that renders the rest from it. Run it after
+  editing the SVG and commit what changes. Never touch a PNG by hand, or the set drifts
+  apart one file at a time.
+- What each service asks for: `favicon.ico` holding 16, 32 and 48, which a browser reaches
+  for when the page links nothing; `favicon-96x96.png` for the tab; `apple-touch-icon.png`
+  at 180 for a home-screen bookmark; `web-app-manifest-192x192.png` and `-512x512.png` named
+  in `site.webmanifest`; and `avatar.png` at 1024 for GitHub and every social network, since
+  they all crop a square themselves.
+- Corners are the one thing that varies: iOS masks a bookmark and every avatar is shown
+  round, so those two render from an SVG whose `rx` is 0. A corner rounded twice reads as a
+  mistake.
+- Adapt the drawing, never the rendering. What a 16-pixel tab cannot carry — a halo, a
+  sparkle — comes out of the SVG, so every size says the same thing at the fidelity it can
+  hold.
+- `rsvg-convert` and `magick` do the rendering, named in a comment at the top of the script,
+  since a machine without them fails at the first line.
+
 # Rails
 
 True in a Rails app.
@@ -645,3 +722,61 @@ True in a Rails app.
   request that matters.
 - Everything else stays: the request, the SQL, and the timing line.
 - A rule for apps we write. A gem never touches a host's logging.
+
+## Target current Rails
+
+- Target either the latest release of Rails or the `main` branch of `rails/rails` on
+  GitHub. Write against current APIs only.
+- Never add version checks, shims or fallbacks for older Rails or Ruby.
+
+## A new kind of value is an Active Record type
+
+- When a page has to tell two columns of the same type apart — money from a share of it,
+  both `decimal(10,2)` — the answer is a custom Active Record type: `Price <
+  ActiveRecord::Type::Decimal` reporting `def type = :price`, registered with
+  `ActiveRecord::Type.register`, and the model saying `attribute :hourly_rate, :price`.
+- Everything downstream then asks `type_for_attribute`, so the rule for a price applies
+  exactly where a `:price` type is what answers — never by guessing from a column's name.
+  `hourly_rate` is money and `commission_rate` is not.
+- Give migrations the same word by extending `TableDefinition` with a column method that
+  delegates to the type it is a kind of. Rails keeps `define_column_methods` private, so
+  write the method out rather than reaching for it.
+- Keep the type's `precision` and `scale` equal to the column's. A type promising five
+  digits over a `decimal(4, 2)` puts a `max` in the browser that the database will refuse.
+- Register with a block, so a type under `app/types/` is autoloaded when a model first asks
+  rather than during boot.
+
+## Prefer `up_only` in migrations
+
+- A step that runs only on the way up is `up_only { backfill }`, never
+  `reversible { |direction| direction.up { backfill } }`. The short form has been Rails'
+  since 5.2, it says what it means, and it leaves no down branch to read past.
+- `reversible` keeps its place where a migration genuinely writes both directions.
+
+## Pass locals to partials explicitly
+
+- A partial never reads a controller's instance variables. Declare strict locals on its
+  first line — `<%# locals: (resources:, pagy:) %>` — and pass them at the call site.
+- A partial taking no locals gets no comment at all. Never write `<%# locals: () %>`.
+- A template rendered by an action may read instance variables. The rule is about partials,
+  which should not depend on who rendered them.
+- Rails enforces it: omit a declared local and the render raises rather than quietly
+  drawing a blank.
+- Where two branches need different locals, write `if`/`else` rather than
+  `render cond ? 'a' : 'b'` — one call cannot pass the right locals to both.
+
+## Match Bootstrap with field_error_proc
+
+- Wherever Bootstrap is the CSS framework, set `config.action_view.field_error_proc`.
+  Rails' default wraps a rejected field in `<div class='field_with_errors'>`, which
+  Bootstrap styles not at all: no red border, and the message nowhere on the page.
+- The proc adds `is-invalid` to the control and follows it with a
+  `<small class='invalid-feedback'>`, which is the pair Bootstrap needs — its
+  `.is-invalid ~ .invalid-feedback` reveals one only next to the other.
+- Guard on the control's class, not on the tag's type. A label carries `form-label` and
+  falls straight through, and so does anything without a `form-control`. Guarding on the
+  tag class instead leaves `html_tag.index 'form-control'` nil for every other kind of tag,
+  and `insert nil` raises.
+- The proc is `instance_exec`'d on the view, so `tag` and `safe_join` are in scope — no need
+  to write markup as a string. Which is just as well: `insert` on a SafeBuffer escapes what
+  it is given, so an attribute spliced in by hand arrives as `&#39;`.
