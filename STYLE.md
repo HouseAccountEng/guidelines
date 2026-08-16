@@ -564,13 +564,15 @@ True in a Rails app.
 - The order, left to right:
   1. `type`, where a hierarchy is told apart by one.
   2. Any non-null enum — a `status` and its like.
-  3. The non-null foreign keys.
-  4. The other non-null attributes.
-  5. The indexed columns, counter caches last among them.
-  6. Everything else.
-  7. The dates and times, Rails' own timestamps last of all.
-- A foreign key outranks the column a record is known by: a band is read as the service it
-  prices and then its own figures, not the other way round.
+  3. The other non-null attributes, counter caches aside.
+  4. The non-null foreign keys.
+  5. The counter caches, whatever they are declared as.
+  6. The indexed columns.
+  7. Everything else.
+  8. The dates and times, Rails' own timestamps last of all.
+- What a record is comes before what it points at, and both come before what it counts: a
+  band is read as its own two figures and then the service they price, and a booking's six
+  counts wait behind the ZIP and the app they were counted for.
 - A screen that draws a table's columns inherits this order, so getting it right is worth
   more than the schema's own tidiness.
 - PostgreSQL cannot move a column, so an order settled late costs a rebuild: a second
