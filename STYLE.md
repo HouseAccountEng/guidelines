@@ -89,6 +89,17 @@ True whatever the language.
 - One prompt, one commit. The subject summarizes the prompt; the body is the full response
   given for it.
 - No trailers naming who wrote it. Git already records an author.
+- No merge commits, ever. `git log --merges` on any branch is empty and stays that way.
+  "Merge that branch into main" always means rebase it: `git rebase main` on the branch,
+  then fast-forward main onto it — never `git merge`, and never `--no-ff`, which exists to
+  force the very commit this forbids.
+- Fix the conflicts a rebase raises. Only a genuinely hard one is worth stopping to ask
+  about — where two changes disagree about what the code should now do, rather than about
+  how to fit two edits into one file.
+- A merge commit that got in is regenerated away: rebase onto the commit before it, check
+  the tree is unchanged either side (`git rev-parse <branch>^{tree}`), and re-run the
+  suite. Only safe while the commits are unpushed — check `git log origin/<branch>` first,
+  and rebase every branch and worktree that was based on what moved.
 
 ## Default to Eastern time
 
@@ -453,8 +464,13 @@ True in a Rails app.
 
 ## PostgreSQL, always
 
-- When an app needs a database it is PostgreSQL. Never MySQL, never SQLite — test-only
-  apps included, and even where SQLite would be less setup.
+- When a stand-alone app needs a database it is PostgreSQL. Never MySQL, never SQLite,
+  even where SQLite would be less setup.
+- A dummy app that exists only to test a gem is the exception, and may use SQLite. It is
+  a fixture rather than an app: nobody deploys it, a gem serves every adapter anyway, and
+  proving that on a second one — with no server to run — is worth more than the fixture
+  resembling the apps. Say in the gem what such a dummy states portably in place of what
+  PostgreSQL alone offers.
 
 ## Validations and constraints together
 
@@ -629,8 +645,3 @@ True in a Rails app.
   request that matters.
 - Everything else stays: the request, the SQL, and the timing line.
 - A rule for apps we write. A gem never touches a host's logging.
-
-## I18n is deferred
-
-- User-facing strings stay plain English until there are enough to be worth a locale file.
-  Do not add one unprompted.
