@@ -565,10 +565,12 @@ True in a Rails app.
   1. `type`, where a hierarchy is told apart by one.
   2. Any non-null enum — a `status` and its like.
   3. The non-null foreign keys.
-  4. The other non-null attributes, dates and times last among them, Rails' timestamps
-     included.
+  4. The other non-null attributes.
   5. The indexed columns, counter caches last among them.
   6. Everything else.
+  7. The dates and times, Rails' own timestamps last of all.
+- A foreign key outranks the column a record is known by: a band is read as the service it
+  prices and then its own figures, not the other way round.
 - A screen that draws a table's columns inherits this order, so getting it right is worth
   more than the schema's own tidiness.
 - PostgreSQL cannot move a column, so an order settled late costs a rebuild: a second
