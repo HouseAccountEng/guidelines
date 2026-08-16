@@ -557,6 +557,24 @@ True in a Rails app.
   validator too.
 - Migrations are reversible, and one that has shipped is never edited.
 
+## Keep a table's columns in a meaningful order
+
+- Creating a table, or adding a column to one, is a chance to say how the table reads.
+  Appending to the end is a decision not to think. Put the column where it belongs.
+- The order, left to right:
+  1. `type`, where a hierarchy is told apart by one.
+  2. Any non-null enum — a `status` and its like.
+  3. The non-null foreign keys.
+  4. The other non-null attributes, dates and times last among them, Rails' timestamps
+     included.
+  5. The indexed columns, counter caches last among them.
+  6. Everything else.
+- A screen that draws a table's columns inherits this order, so getting it right is worth
+  more than the schema's own tidiness.
+- PostgreSQL cannot move a column, so an order settled late costs a rebuild: a second
+  table in the right order, the rows poured across, then every index and foreign key
+  named again. Cheap while a table is young, which is the reason to decide early.
+
 ## Both sides of an association
 
 - A `belongs_to` gets the matching `has_many`. Reading a foreign key from one side only is
