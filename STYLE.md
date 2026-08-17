@@ -17,6 +17,11 @@ True whatever the language.
 - Personal data is encrypted at rest: phone, email, surname, street. Suspect a column is
   personal? Ask before storing it in the clear.
 - A first name is not personal data and is not encrypted. A surname is. Asked and settled.
+- What a screen may show is a separate question from what the database keeps. An admin
+  tool reads PII for a living: a record's own page draws it, masked until asked for, and
+  a table of many records draws none of it by default -- one screenshot there discloses
+  a page of strangers at once. A host may name one column back, deliberately, where a
+  row is recognised by nothing else.
 
 ## Code optimistically
 
