@@ -620,6 +620,15 @@ True in a Rails app.
 - Never constrain the *shape* of an encrypted value in the database: it holds ciphertext,
   so only nullability and uniqueness still mean anything. Shape belongs to the model.
 
+## A relation is a scope
+
+- A class method on an Active Record that answers an `ActiveRecord::Relation` is written as
+  `scope`, not as a `def` in `class_methods`. It composes, it chains, and it reads as the
+  query it is rather than as a lookup that happens to return one.
+- A guard inside it answers `none`, never `nil`. A scope that can answer `nil` cannot be
+  chained, and the caller pays for it at the next `.where`.
+- A `def` is right where the answer is not a relation: a record, a count, a boolean.
+
 ## Treat an extra query as a defect
 
 - Rendering a page issues as few queries as it can, and the count does not grow with the
@@ -779,6 +788,15 @@ True in a Rails app.
   `reversible { |direction| direction.up { backfill } }`. The short form has been Rails'
   since 5.2, it says what it means, and it leaves no down branch to read past.
 - `reversible` keeps its place where a migration genuinely writes both directions.
+
+## A migration documents itself in its name
+
+- A class inheriting from `ActiveRecord::Migration` takes no documentation comment. Its name
+  says what it does, it has exactly one caller and that caller is the framework, and it is
+  read once and then only as history.
+- This is the one exception to commenting every public declaration.
+- What a migration cannot say in its name — why a backfill reads the source it does, what it
+  could not reach — goes in the commit message, where the rest of the reasoning already is.
 
 ## Pass locals to partials explicitly
 
