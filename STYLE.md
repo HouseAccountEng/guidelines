@@ -596,6 +596,23 @@ True in a Rails app.
   `:markets` as a scope and fails much later with `undefined method 'arity'`.
 - Neither side helps against `delete_all`, which is raw SQL and skips callbacks.
 
+## A cascade that runs nothing is one query
+
+- `dependent:` follows what the child requires, and then how much of Rails the child needs.
+  `:destroy` loads every row and destroys it one at a time; `:delete_all` — `:delete` on a
+  `has_one` — issues one statement. Where nothing has to run per row, the second is right, and
+  the difference is a query per child rather than a constant.
+- Nothing has to run per row when the child has: no `before_destroy`, `after_destroy` or
+  `after_destroy_commit`; no `counter_cache:` or `touch:` on any of its `belongs_to`, since
+  Rails implements both as destroy callbacks and a skipped one leaves a stale column behind;
+  no attachment to purge; and no `dependent:` of its own, because a cascade that is not run
+  does not cascade.
+- A concern can put any of those on a child without the parent's file showing it. Read the
+  child, not the association.
+- Say it where the child changes, not where it is declared: the day a child grows a counter
+  cache or a child of its own is the day the parent's `:delete_all` becomes a bug, and the
+  association line is the last place anybody will look.
+
 ## Count through the association, not the counter cache
 
 - `service.bands.size`, not `service.bands_count`. A counter cache is an optimisation of the
