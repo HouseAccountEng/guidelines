@@ -514,6 +514,31 @@ end
 - `rsvg-convert` and `magick` do the rendering, named in a comment at the top of the script,
   since a machine without them fails at the first line.
 
+## Semantic Versioning starts at 1.0
+
+- Everything above about which release a change picks -- patch for a fix, minor for a feature,
+  major for a breaking change -- binds a gem from `1.0.0` onwards. Below that the version is the
+  author's to choose, and a `0.x` release may break whatever it likes.
+- Which makes the README's pin tighter before 1.0: `~> 0.4.0`, which stops short of `0.5`, rather
+  than `~> 0.4`, which admits every `0.x` there will ever be. `~> major.minor` only promises what
+  it says once the major is real.
+- Reaching `1.0.0` is a claim that the API is settled enough to be broken only on purpose. Make it
+  when that is true, not when the feature list has grown long enough.
+
+## A gem's page carries two links: the source and the reference
+
+- Every GitHub Page we publish for a gem links to the source on GitHub and to the API
+  reference, which always lives at `https://rubydoc.info/gems/<name>` — Omen's at
+  https://rubydoc.info/gems/omen. Both, on every page, however small the gem.
+- Nothing is hosted and nothing is kept in step: rubydoc.info builds the reference from what
+  RubyGems holds, so the link answers with the version that was last pushed. That is also
+  why the link is worth having next to the page's own prose — the prose says why, and the
+  reference says what, from the source rather than from memory.
+- The same URL goes in the gemspec, as `spec.metadata['documentation_uri']`. That is what
+  makes RubyGems' own listing carry the link, so somebody who never reaches the page still
+  finds the reference — and a gem whose page and whose listing point at two different places
+  has one of them wrong.
+
 # Rails
 
 True in a Rails app.
@@ -654,6 +679,17 @@ True in a Rails app.
   check that loads the rows the loop needs is right, the one that adds a probing `SELECT`
   is not.
 - Assert the count in a test, so a later edit cannot quietly add one back.
+
+## Never write a migration test
+
+- A migration runs once, against a shape of the database that is gone by the time anyone reads a
+  test of it. Proving it needs that shape back — adding the dropped column again, resetting the
+  column cache, undoing both afterwards — which tests the scaffolding rather than the migration.
+- What a migration deserves instead is a run against a copy of the real data before it ships:
+  restore production locally, migrate, compare the result to the source. That answers the question
+  a fixture cannot, which is whether the rule is right about the rows that actually exist.
+- The rule a migration encodes belongs in whatever it leaves behind. If nothing in `app/` will hold
+  it, the migration did something the application does not believe in.
 
 ## One system test, many assertions
 
