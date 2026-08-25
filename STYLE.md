@@ -114,15 +114,6 @@ True whatever the language.
 
 ---
 
-## No code of conduct, no ideology
-
-- Never add a `CODE_OF_CONDUCT.md`, and never link to or mention one from a README, a
-  gemspec or anywhere else. Generators that write one (`bundle gem`) have that output
-  deleted.
-- Keep a codebase free of ethics, religion and politics — comments, docs, error messages,
-  fixtures and sample data alike.
-- A LICENSE is not covered by this. It is a legal notice.
-
 ## No indefinite article in an interpolated string
 
 - Never write `a %{model}` or `an %{model}`. Which one is right is decided by sound and not
@@ -372,14 +363,6 @@ end
 - Double quotes only where the string needs them: interpolation or an escape.
 - Enforced by `Style/StringLiterals` and `Style/StringLiteralsInInterpolation`, both
   `single_quotes`.
-
-## Never freeze strings
-
-- No `# frozen_string_literal: true`, in any file, including generated ones.
-- Never `.freeze` a string. Array and hash constants are still worth freezing.
-- Where a constant only names something, prefer a symbol — immutable already.
-- `Style/FrozenStringLiteralComment` is `never`; `Style/MutableConstant` is off, since it
-  demands `.freeze` on string constants and cannot skip them.
 
 ## Trailing comma on a multiline literal
 
