@@ -818,6 +818,27 @@ True in a Rails app.
   carries the list; split only when it will not fit.
 - `Style/MixinGrouping`, `EnforcedStyle: grouped` — its default demands the opposite.
 
+## A wrapper configures itself, never from a neighbour's settings
+
+- A class that talks to a third party gets its key, its model, its host, its version and its
+  timeouts from **its own** default — a constant it declares, an environment variable it names, a
+  credential it reads. Never from another component's configuration object, however convenient.
+- The test is one question: **if the other thing were deleted, would this one still work?** Where
+  it would not, and it never calls the other thing, the coupling buys nothing and hides everything.
+- Two wrappers that happen to talk to the same service are not clients of one another.
+  `Claude::Draft` writes a campaign's message and the omen gem answers questions about our data;
+  they share an Anthropic account and nothing else, so `Omen.config.api_key` inside `Claude::Draft`
+  was a dependency on how an unrelated gem stores a secret. Moving that setting, or dropping the
+  gem, would have broken drafting for a reason nobody could see from either file.
+- The DRY objection does not hold here. Two files naming `ANTHROPIC_API_KEY` is not one fact written
+  twice; it is two independent statements that happen to agree today, and are each free to change.
+  Collapsing them buys a line and sells an edge in the dependency graph.
+- **Prefer the default you do not write.** Where the library already reads the conventional
+  variable — the `anthropic` gem reads `ANTHROPIC_API_KEY`, `redis` reads `REDIS_URL` — pass nothing
+  at all. A setting never written cannot disagree with anyone else's.
+- What is *not* a neighbour's configuration: Rails credentials, `ENV`, and the app's own settings
+  table. Those belong to the application, and everything in it may read them.
+
 ## Every endpoint is Turbo-enabled
 
 - Assume a Turbo visit. A redirect out of the app needs `allow_other_host: true`, a
