@@ -278,6 +278,23 @@ True in any Ruby, a gem included.
 - Enforced by `rake file_length`, which reads `git ls-files` — an untracked file is
   invisible to it, so a green run before `git add` proves nothing.
 
+## At most 50 Ruby files in a folder
+
+- Counted per folder rather than per tree: what sits in a subfolder is that subfolder's
+  business, so nesting is the way under the limit and not a way around it.
+- Over the limit, ask what the folder is two of. `app/models` splits by the record the rest
+  hang off; a gem's `lib` splits by what its files are — the records, what extends them, the
+  errors they raise.
+- A folder named for a layer rather than for a thing is the tell that the split was filed
+  rather than decided. `resources`, `concerns` and `errors` earn their names because each
+  answers what a file *is*; `helpers`, `services` and `support` answer only where it went.
+- Exempt: `db/migrate`, which only grows and cannot be rearranged, and everything that is not
+  Ruby — fixtures, assets and whatever a tool wrote are nobody's to tidy.
+- Enforced by `rake folder_size`, which reads `git ls-files`, so an untracked file is invisible
+  to it.
+- 50 is where the rule starts, set so that only the most crowded folders have to move. It
+  will tighten.
+
 ## Comment every public declaration
 
 - One line before every public class, module, constant and method saying what it is for.
