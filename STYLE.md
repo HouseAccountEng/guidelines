@@ -751,6 +751,25 @@ True in a Rails app.
 - An array column is `t.text :urls, array: true, default: [], null: false` — always an
   array, so nothing has to check for nil first.
 
+## A timestamp that means a state gets a stored virtual column beside it
+
+- When a `date`, `time` or `datetime` column's NULL/NON-NULL status carries a meaning of its
+  own — signed or not, stopped or not, cancelled or not — say so in the schema:
+  `t.virtual :signed, type: :boolean, as: '(signed_on IS NOT NULL)', stored: true`, beside
+  `signed_on`. Same for `stopped_at` and `stopped`, `cancelled_at` and `cancelled`.
+- The name is the adjective the timestamp implies, with its `_on`/`_at` suffix dropped. Active
+  Record gives a boolean column its own predicate, so `signed?` and `stopped?` arrive with the
+  column and no model code is written at all.
+- `stored: true`, always. PostgreSQL only computes a generated column on write, and a column
+  that is not stored cannot be indexed — which is most of the point.
+- The point is that a state the application asks about one record at a time becomes something a
+  query can reach: selected, ordered, indexed, filtered, and available to Ransack the way any
+  other column is. A method can answer none of those. And because Postgres computes it, it
+  cannot drift from the timestamp it describes.
+- Not every nullable timestamp qualifies. `delivered_at` on a row that is only ever delivered
+  once records *when*, and nothing asks *whether* — leave it alone. The test is whether code
+  keeps asking `x_at.present?`; that question is the column asking to exist.
+
 ## Emails are citext
 
 - A plaintext email column is `citext`, never `string`: that is what makes comparison and
