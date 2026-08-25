@@ -834,8 +834,8 @@ True in a Rails app.
   twice; it is two independent statements that happen to agree today, and are each free to change.
   Collapsing them buys a line and sells an edge in the dependency graph.
 - **Prefer the default you do not write.** Where the library already reads the conventional
-  variable — the `anthropic` gem reads `ANTHROPIC_API_KEY`, `redis` reads `REDIS_URL` — pass nothing
-  at all. A setting never written cannot disagree with anyone else's.
+  variable — `anthropic` reads `ANTHROPIC_API_KEY`, `redis` reads `REDIS_URL` — pass nothing at
+  all. A setting never written cannot disagree with anyone else's.
 - What is *not* a neighbour's configuration: Rails credentials, `ENV`, and the app's own settings
   table. Those belong to the application, and everything in it may read them.
 
