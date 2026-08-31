@@ -295,6 +295,13 @@ True in any Ruby, a gem included.
 - One line if at all possible. If one cannot carry it, cut the aside, not the rule.
 - One line, not two. Where a YARD tag already says it, a prose line above says it twice —
   keep the tag and drop the prose.
+- A tag describes its object as a bare noun phrase, never opened with an article:
+  `@return [String] business name.`, not `the business name` — the article spends width
+  saying nothing. The one-line comment above a class or method keeps its prose, article
+  and all.
+- `@param` lines stand in the order the signature takes them.
+- A comment describes the library, never a test: what a test hands in or reads back is the
+  test's business, so "or as a test wrote it" has no place above production code.
 - A comment that keeps growing is paying interest on a design that does not explain itself.
   Shorten the design first; the comment goes with it.
 
@@ -357,6 +364,9 @@ end
 
 - Split long strings across lines rather than running over.
 - Markup is exempt: a URL or a long class list does not wrap usefully.
+- A class declaration is exempt: the full class name beside its base class stays on one
+  line however far past 100 the two run -- split, neither line says what the class is.
+  Allowed by `Layout/LineLength`'s `AllowedPatterns`.
 
 ## Single quotes by default
 
