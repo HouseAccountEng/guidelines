@@ -307,7 +307,7 @@ True in any Ruby, a gem included.
 
 ## The long version goes in the commit message
 
-- When one line will not hold everything worth saying, that is not a licence for a second
+- When one line will not hold everything worth saying, that is not a license for a second
   line — it is a sign the rest belongs in the commit message. Keep the line, move the essay.
 - The two are read at different times. Somebody reading the method wants to know what it is
   for, right now, in one line. Somebody asking why it is like that is already in `git log`,
@@ -441,6 +441,21 @@ end
 - Every gem carries a trailing comment saying what would break without it — not what the
   gem is. Same for `add_dependency`.
 
+## A gem is worth what it deletes
+
+- The question is never how much code a gem holds. It is how much the app it was cut out of
+  stops holding. Sixty lines that leave the host is a good gem; six hundred that leave nothing
+  behind is a library nobody asked for.
+- A line deleted is worth ten written. Deleted code cannot break, cannot drift, and is not owed
+  a test, a comment or a second look every time somebody reads past it. A line added is owed
+  all three, for as long as it stands.
+- So the ceremony a gem ships with — the CHANGELOG, the console, the page, the icon set — is
+  not what to weigh it against. That is paid once, by whoever publishes. The deletion is
+  collected on every read of the app that no longer carries the code.
+- Somebody else's gem deletes the same lines and adds what a dependency adds: a license to
+  honor, a maintainer who may stop, a release that may break. Weigh those against the lines it
+  takes away — never against how much code the gem itself holds.
+
 ## What a gem always ships
 
 - `bin/console` and `bin/setup`: one to try the library in a REPL, one to get a clone
@@ -502,7 +517,7 @@ end
 
 ## A gem's page draws its mark once and renders every icon a service asks for
 
-- A gem that gets a GitHub Page with colours and artwork of its own gets the whole icon set
+- A gem that gets a GitHub Page with colors and artwork of its own gets the whole icon set
   in the same breath — the browser's, iOS', and the avatar GitHub and the social networks
   show. A page whose tab is a blank sheet and whose repository is a grey identicon is half
   built.
