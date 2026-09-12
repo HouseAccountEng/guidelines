@@ -907,6 +907,20 @@ True in a Rails app.
   since 5.2, it says what it means, and it leaves no down branch to read past.
 - `reversible` keeps its place where a migration genuinely writes both directions.
 
+## Roll a branch's migrations back before you leave it
+
+- A database carries whatever was last run against it, and it does not know which branch that
+  was. Leave a branch with its migrations still applied and the next one dumps a `db/schema.rb`
+  describing tables it has never heard of — a diff on a branch that changed nothing.
+- So before switching away: `bin/rails db:rollback STEP=n` for the `n` migrations that branch
+  added, and only then check out the other one. Coming back re-runs them.
+- Which makes reversibility a working requirement, not a nicety: a migration written with `up`
+  alone cannot be rolled back, so it strands every branch that shares the database with it.
+  Write `change`, and where a step runs one way only, `up_only` inside it.
+- The rule the diff would otherwise tempt you into breaking: never commit a `db/schema.rb`
+  dumped off a database carrying another branch's migrations. Leave the file alone, or edit it
+  by hand to say what this branch's migrations actually do.
+
 ## A migration documents itself in its name
 
 - A class inheriting from `ActiveRecord::Migration` takes no documentation comment. Its name
