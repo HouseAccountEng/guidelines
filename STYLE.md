@@ -939,6 +939,16 @@ True in a Rails app.
 - What a migration cannot say in its name — why a backfill reads the source it does, what it
   could not reach — goes in the commit message, where the rest of the reasoning already is.
 
+## A view holds no variables and no comments
+
+- Never assign a local in a view — no `<% business = … %>` block at the top of a template.
+  What a page shows is decided before the view runs: an instance variable the controller
+  sets, or a helper that answers the question by name. A view that computes is a view that
+  has to be read twice, once for the markup and once for the Ruby.
+- No comments in ERB, save a partial's `locals:` line. What a template does is what its
+  markup says; why it does it that way is the commit message's, where the reasoning keeps
+  the context it was written in and never describes markup that has since changed.
+
 ## Pass locals to partials explicitly
 
 - A partial never reads a controller's instance variables. Declare strict locals on its
