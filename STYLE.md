@@ -72,6 +72,15 @@ True whatever the language.
 - An acronym is capitals wherever it appears: ZIP code, API, PIN. Where the language can
   be told, tell it, or every generated heading is wrong.
 
+## Write the character, not its entity
+
+- An apostrophe is `’`, a dash is `—`, an ellipsis is `…`: the character itself, in the
+  source, wherever it is used correctly — a view, a locale file, a comment. Never `&rsquo;`,
+  `&mdash;` or `&hellip;`, which say in six characters what one says, and read as code where
+  a sentence should read as words.
+- Every file is UTF-8, so nothing has to be escaped to survive; only what HTML itself
+  claims — `<`, `&` in running text — is written as an entity.
+
 ## Don't overtest
 
 - Line coverage stays at 100% and the suite fails below it. A test that can be deleted
