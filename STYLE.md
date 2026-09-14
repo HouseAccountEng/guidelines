@@ -952,6 +952,31 @@ True in a Rails app.
   markup says; why it does it that way is the commit message's, where the reasoning keeps
   the context it was written in and never describes markup that has since changed.
 
+## A blank line around every block in a view
+
+- A `content_for` block, a `render` and any other block-level call in an ERB template
+  stands apart from its neighbours by a blank line above and below, the way a method does
+  in Ruby. A layout that fills `:head`, fills `:content` and then renders the layout it
+  nests in reads as three paragraphs, not one wall of tags:
+
+      <% content_for :head do %>
+        <%= javascript_importmap_tags 'flow' %>
+      <% end %>
+
+      <% content_for :content do %>
+        <div class='flow'>
+          <%= yield %>
+        </div>
+      <% end %>
+
+      <%= render template: 'layouts/houseaccount' %>
+
+- Markup inside a block keeps its own rhythm — no blank line is owed between a `<div>` and
+  the `<%- if -%>` under it. The rule is for the seams between blocks, where one thing
+  the template does ends and the next begins.
+- A view that is one block needs no blank lines at all. Two blocks or a block and a call are
+  what earn the seam.
+
 ## Pass locals to partials explicitly
 
 - A partial never reads a controller's instance variables. Declare strict locals on its
