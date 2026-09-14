@@ -372,7 +372,10 @@ end
 ## Lines at most 100 characters
 
 - Split long strings across lines rather than running over.
-- Markup is exempt: a URL or a long class list does not wrap usefully.
+- Markup is exempt, `.html.erb` included: a URL or a long class list does not wrap usefully,
+  and neither does a helper call — `form_with_url verify_path, model: @contact, method: :post,
+  class: 'p-0', data: { controller: :require } do |form|` stays on one line however long. A
+  tag or a call broken across lines for length alone reads worse, not better.
 - A class declaration is exempt: the full class name beside its base class stays on one
   line however far past 100 the two run -- split, neither line says what the class is.
   Allowed by `Layout/LineLength`'s `AllowedPatterns`.
