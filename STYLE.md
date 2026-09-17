@@ -275,6 +275,11 @@ True in any Ruby, a gem included.
   a second controller, a helper for a second helper, a test for a second case.
 - Exempt: prose (`.md`, `.txt`), markup whose length is the page's (`.html`, `.erb`), data
   and the migrations that carry it, and vendored code, which is not ours to reformat.
+- A locale file is data of that kind, so `.yml` is exempt too. What one holds is a line per
+  user-facing string, so its length is driven by how many screens the app has rather than by
+  any design choice — nothing in it can be extracted, since a key lives where `t` looks for
+  it. A locale kept under the limit pays for it in the comments that say what a key is for,
+  which is the opposite of what the limit is for.
 - Enforced by `rake file_length`, which reads `git ls-files` — an untracked file is
   invisible to it, so a green run before `git add` proves nothing.
 
