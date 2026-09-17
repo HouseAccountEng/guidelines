@@ -708,6 +708,26 @@ True in a Rails app.
   chained, and the caller pays for it at the next `.where`.
 - A `def` is right where the answer is not a relation: a record, a count, a boolean.
 
+## Never Arel, and Ruby before SQL
+
+- Three rules, in order of precedence. **Never build a query with Arel**: no `arel_table`,
+  no `Arel::Nodes`, no predicate objects, no `.eq(...).desc.nulls_last`. It is a private API
+  Rails moves between versions, it reads as a second language nobody writes daily, and a
+  wrong node raises the name of an internal class rather than anything about the query.
+- **Prefer Ruby to SQL** wherever the query builder can say it. `where`, `joins`,
+  `left_joins`, `merge`, `order` and a scope on the association say most of what a
+  hand-written string says, and say it once: `left_joins(:primary_territory)` carries that
+  association's own scope, where the `JOIN ... ON ... IN (SELECT ...)` it replaces copies
+  the rule into a second place to drift from.
+- **Where those two collide, SQL wins.** A fragment in a `select` or an `order` is better
+  than the Arel that would avoid it: it is the language the database actually speaks, every
+  reader knows it, and it does not break on an upgrade. Keep the fragment to the part Ruby
+  could not say, and pass values through `sanitize_sql_array` rather than interpolating.
+- `Arel.sql` is not Arel for this purpose. It builds nothing — it marks a string as
+  deliberate SQL so `order` will accept it — so it is how the third rule is obeyed rather
+  than an exception to the first.
+- Existing Arel is not permission to add more. Ask.
+
 ## Treat an extra query as a defect
 
 - Rendering a page issues as few queries as it can, and the count does not grow with the
