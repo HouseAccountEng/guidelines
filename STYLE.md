@@ -331,6 +331,27 @@ True in any Ruby, a gem included.
   describe code that no longer exists.
 - So: one line above the method, and the paragraphs in the message that introduces it.
 
+## Say what it is, plainly
+
+- A comment is a plain statement of what the thing is for. `# The fields these pages hide.`
+- No metaphor, no aphorism, no sentence shaped to be quoted. Not `Machinery rather than
+  anything a contact is read by or picked with`, not `The federal code and Google's own
+  handle: each identifies the county to somebody else's system`. Say which fields, say what
+  the constant holds.
+- A reader is scanning. One clause, the subject the code names, no colon holding two halves
+  in tension and no word doing double duty.
+- Writing at length is the tell that the line is decorating rather than informing. Where the
+  plain sentence sounds obvious, the comment was not needed.
+
+## A comment describes the code now, never its history
+
+- Say what the code is for. Never what it used to be, what it replaced, when it arrived, or
+  why it changed.
+- `has always been`, `is still`, `no longer`, `used to`, `previously`, `now that`, a ticket
+  number: all history, all out.
+- The reader wants to know what the method does today. Whoever wants the rest is in `git
+  log`, where it keeps its context and stays true.
+
 ## Don't wrap an instance variable in an accessor
 
 - An `attr_reader` for a variable only the class itself reads adds a method to the public
