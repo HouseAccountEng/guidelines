@@ -352,6 +352,14 @@ True in any Ruby, a gem included.
 - The reader wants to know what the method does today. Whoever wants the rest is in `git
   log`, where it keeps its context and stays true.
 
+## A comment stands on its own, wherever the method lands
+
+- Say the whole thing every time. `The same for a DELETE.` says nothing to a reader who
+  meets this method first, and nothing at all once the method it leans on is renamed,
+  moved or deleted.
+- No `the same`, `as above`, `ditto`, `like the one before it`, `see X`. Two methods that
+  would read alike are two comments that read alike, and the repetition is the point.
+
 ## Don't wrap an instance variable in an accessor
 
 - An `attr_reader` for a variable only the class itself reads adds a method to the public
