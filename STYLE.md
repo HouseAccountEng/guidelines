@@ -403,8 +403,14 @@ end
   `if @booking.save` ... `else` ... `end`, never `return ... if @booking.save`.
 - Prefer `&.`, `||=`, `Array()`, `Hash#fetch` with a default, and keyword arguments past
   two parameters.
-- Inline a method body on one line in exactly two cases: an empty body, `def show; end`,
-  and an endless method, `def advice_params = params.expect(advice: [:content])`.
+- A method whose body is one expression is written on one line where the line fits:
+  `def advice_params = params.expect(advice: [:content])`. An empty body is `def show; end`.
+- Never where the body assigns. `def new = @band = @service.bands.new` reads as two `=` in
+  one line, and what the method is for is lost between them. `@ivar =`, `||=`, `&&=`, `+=`
+  and a plain local all count, and each of them stays a method of three lines.
+- Never where the body ends in a modifier `if` or `unless`. The modifier binds to the `def`
+  rather than to the body, so the method is defined only where the condition holds — and
+  the condition reads an argument that does not exist yet.
 
 ## Lines at most 100 characters
 
