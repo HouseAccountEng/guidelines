@@ -410,6 +410,9 @@ end
   an instance variable, a plain local, an attribute — `def set_matched = self.status =
   :matched` — a class or a constant, and `||=`, `&&=` and `+=` along with `=`. Each of
   them stays a method of three lines.
+- Never where the body takes a block. `def import_jobs(jobs) = jobs.each { |job| Booking.
+  import job, source: source }` hides the walk inside the answer. A brace holding a hash is
+  not a block: `def search_params = { q: params.permit([:s]) }.merge page: params[:page]`.
 - Never where the body ends in a modifier `if` or `unless`. The modifier binds to the `def`
   rather than to the body, so the method is defined only where the condition holds — and
   the condition reads an argument that does not exist yet.
