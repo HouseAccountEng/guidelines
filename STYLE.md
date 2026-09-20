@@ -635,6 +635,15 @@ True in a Rails app.
         resource :closure
       end
 
+## A flash too long to redirect with goes on its own line
+
+- A message and a redirect fit on one line where they fit. Where the line limit says
+  otherwise, the message goes first as `flash.notice` or `flash.alert` and the redirect
+  follows whole, rather than a `redirect_to` wrapped over two lines by its `notice:`.
+
+      flash.notice = "#{@integration} was disconnected."
+      redirect_to provider_path(@provider), status: :see_other
+
 ## PostgreSQL, always
 
 - When a stand-alone app needs a database it is PostgreSQL. Never MySQL, never SQLite,
