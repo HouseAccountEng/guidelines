@@ -390,6 +390,9 @@ def import_visit(visit)                          # not: return ... if ours
   end
 end
 ```
+- A `save` or an `update` answering yes and no is not a refusal. Both ways are what the
+  same decision leads to, and both come after the work, so they read as `if`/`else`:
+  `if @booking.save` ... `else` ... `end`, never `return ... if @booking.save`.
 - Prefer `&.`, `||=`, `Array()`, `Hash#fetch` with a default, and keyword arguments past
   two parameters.
 - Inline a method body on one line in exactly two cases: an empty body, `def show; end`,
